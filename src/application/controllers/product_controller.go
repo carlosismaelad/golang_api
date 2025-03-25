@@ -4,6 +4,7 @@ import (
 	"crud_api/src/application/usecase"
 	"crud_api/src/domain/model"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,4 +42,40 @@ func (p *productController) CreateProduct(ctx *gin.Context){
 
 	ctx.JSON(http.StatusCreated, insertedProduct)
 
+}
+
+func(p *productController) GetProductById(ctx *gin.Context){
+	id := ctx.Param("productId")
+
+	if id == ""{
+		response := model.Response{
+			Message: "Atenção: Id do produto não pode ser nulo.",
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	productId, err := strconv.Atoi(id)
+	if err != nil{
+		response := model.Response{
+			Message: "Atenção: Id inválido. O id do produto precisa ser um número.",
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	product, err := p.productUsecase.GetProductById(productId)
+	if err != nil{
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	if product == nil{
+		response := model.Response{
+			Message: "Atenção: Produto não foi encontrado na base de dados.",
+		}
+		ctx.JSON(http.StatusNotFound, response)
+		return
+	}
+	ctx.JSON(http.StatusOK, product)
 }
