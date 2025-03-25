@@ -1,17 +1,17 @@
 package main
 
 import (
-	"crud_api/src/application/controllers"
-	"crud_api/src/application/usecase"
+	productcontrollers "crud_api/src/application/controllers/product"
+	productusecase "crud_api/src/application/usecase/product"
 	"crud_api/src/infrastructure/db"
-	"crud_api/src/infrastructure/repository"
+	productrepository "crud_api/src/infrastructure/repository/product"
+	registerroutes "crud_api/src/infrastructure/routes"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main(){
 	server := gin.Default()
-
 	
 	//Connection database layer
 	dbConnection, err := db.ConnectDb()
@@ -20,23 +20,15 @@ func main(){
 	}
 
 	//Repository layer
-	ProductRepository := repository.NewProductRepository(dbConnection)
+	ProductRepository := productrepository.NewProductRepository(dbConnection)
 
 	//Usecase
-	ProductUsecase := usecase.NewProductUsecase(ProductRepository)
+	ProductUsecase := productusecase.NewProductUsecase(ProductRepository)
 
 	//Controllers layer
-	ProductController := controllers.NewProductController(ProductUsecase)
+	ProductController := productcontrollers.NewProductController(ProductUsecase)
 
 
-	server.GET("/", func(ctx *gin.Context){
-		ctx.JSON(200, gin.H{
-			"message": "API ok!",
-		})
-	})
-	server.GET("/products", ProductController.GetProducts)
-	server.POST("/product", ProductController.CreateProduct)
-	server.GET("/product/:productId", ProductController.GetProductById)
-	server.DELETE("/product/:productId", ProductController.DeleteProductById)
+	registerroutes.RegisterRoutes(server, &ProductController)
 	server.Run(":8000")
 }

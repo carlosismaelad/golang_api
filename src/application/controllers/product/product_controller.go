@@ -1,7 +1,7 @@
-package controllers
+package productcontrollers
 
 import (
-	"crud_api/src/application/usecase"
+	productusecase "crud_api/src/application/usecase/product"
 	"crud_api/src/domain/model"
 	"net/http"
 	"strconv"
@@ -9,17 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type productController struct{
-	productUsecase usecase.ProductUsecase
+type ProductController struct{
+	productUsecase productusecase.ProductUsecase
 }
 
-func NewProductController(pu usecase.ProductUsecase) productController{
-	return productController{
+func NewProductController(pu productusecase.ProductUsecase) ProductController{
+	return ProductController{
 		productUsecase: pu,
 	}
 }
 
-func(p *productController) GetProducts(ctx *gin.Context){
+func(p *ProductController) GetProducts(ctx *gin.Context){
 	products, err := p.productUsecase.GetProducts()
 	if err != nil{
 		ctx.JSON(http.StatusInternalServerError, err)
@@ -27,7 +27,7 @@ func(p *productController) GetProducts(ctx *gin.Context){
 	ctx.JSON(http.StatusOK, products)
 }
 
-func (p *productController) CreateProduct(ctx *gin.Context){
+func (p *ProductController) CreateProduct(ctx *gin.Context){
 	var product model.Product
 	err := ctx.BindJSON(&product)
 	if err != nil{
@@ -44,7 +44,7 @@ func (p *productController) CreateProduct(ctx *gin.Context){
 
 }
 
-func(p *productController) GetProductById(ctx *gin.Context){
+func(p *ProductController) GetProductById(ctx *gin.Context){
 	id := ctx.Param("productId")
 
 	if id == ""{
@@ -80,7 +80,7 @@ func(p *productController) GetProductById(ctx *gin.Context){
 	ctx.JSON(http.StatusOK, product)
 }
 
-func(p *productController) DeleteProductById(ctx *gin.Context){
+func(p *ProductController) DeleteProductById(ctx *gin.Context){
 	id := ctx.Param("productId")
 
 	if id == ""{

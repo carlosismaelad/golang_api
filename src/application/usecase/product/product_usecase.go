@@ -1,15 +1,15 @@
-package usecase
+package productusecase
 
 import (
 	"crud_api/src/domain/model"
-	"crud_api/src/infrastructure/repository"
+	productrepository "crud_api/src/infrastructure/repository/product"
 )
 
 type ProductUsecase struct{
-	repository repository.ProductRepository
+	repository productrepository.ProductRepository
 }
 
-func NewProductUsecase(repo repository.ProductRepository) ProductUsecase{
+func NewProductUsecase(repo productrepository.ProductRepository) ProductUsecase{
 	return ProductUsecase{
 		repository: repo,
 	}

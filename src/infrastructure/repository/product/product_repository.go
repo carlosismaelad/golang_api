@@ -1,4 +1,4 @@
-package repository
+package productrepository
 
 import (
 	"crud_api/src/domain/model"
