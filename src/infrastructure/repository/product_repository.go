@@ -83,3 +83,29 @@ func (pr *ProductRepository) GetProductById(id_product int) (*model.Product, err
 	query.Close()
 	return &product, nil
 }
+
+func (pr *ProductRepository) DeleteProductById(id_product int) (string, error){
+	query, err := pr.connection.Prepare("DELETE FROM product WHERE id = $1")
+	if err != nil{
+		fmt.Println(err)
+		return "Atenção: Erro ao realizar consulta para exclusão.", err
+	}
+	defer query.Close()
+
+	result, err := query.Exec(id_product)
+	if err != nil{
+		fmt.Println(err)	
+		return "Atenção: produto para exclusão não localizado", err
+	}
+	
+	rowsAffected, err := result.RowsAffected()
+	if err != nil{
+		return "Atenção: Erro ao verificar a exclusão do produto.", err
+	}
+
+	if rowsAffected == 0 {
+		return "Atenção: produto para exclusão não localizado", nil
+	}
+
+	return "Produto excluído com sucesso!", nil	
+}

@@ -79,3 +79,39 @@ func(p *productController) GetProductById(ctx *gin.Context){
 	}
 	ctx.JSON(http.StatusOK, product)
 }
+
+func(p *productController) DeleteProductById(ctx *gin.Context){
+	id := ctx.Param("productId")
+
+	if id == ""{
+		response := model.Response{
+			Message: "Atenção: Id do produto não pode ser nulo.",
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	productId, err := strconv.Atoi(id)
+	if err != nil{
+		response := model.Response{
+			Message: "Atenção: Id inválido. O id do produto precisa ser um número.",
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	deletedProduct, err := p.productUsecase.DeleteProductById(productId)
+	if err != nil {
+		response := model.Response{
+			Message: "Erro interno ao excluir produto",
+		}
+		ctx.JSON(http.StatusInternalServerError, response)
+		return
+	}
+
+	response := model.Response{
+		Message: deletedProduct,
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}
