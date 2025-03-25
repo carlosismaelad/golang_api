@@ -5,3 +5,6 @@ up:
 
 stop:
 	docker compose -f compose.yaml stop
+
+build:
+	docker build -t go-crud-api .
