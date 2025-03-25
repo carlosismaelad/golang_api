@@ -1,0 +1,43 @@
+# Diretórios e arquivos binários gerados
+/bin/
+/build/
+/tmp/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Arquivos de cache do Go
+*.log
+*.cache
+*.tmp
+
+# Dependências baixadas via `go mod`
+/vendor/
+
+# Arquivos de compilação do Go
+*.o
+*.a
+*.exe
+*.swp
+
+# Executáveis gerados
+/crud_api
+/crud_project
+
+# Configurações do IDE/editor de código
+.vscode/
+.idea/
+*.iml
+
+# Arquivos do Go Modules
+go.sum
+
+# Dados sensíveis e arquivos de configuração
+.env
+.env.*
+config.yaml
+config.json
+credentials.json
