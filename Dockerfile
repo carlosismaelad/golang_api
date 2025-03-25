@@ -14,7 +14,7 @@ COPY . .
 RUN go build -o main ./src
 
 # Usa uma imagem menor para execução
-FROM golang:1.21 AS runner
+FROM golang:1.23 AS runner
 WORKDIR /app
 
 # Copia apenas o binário compilado
